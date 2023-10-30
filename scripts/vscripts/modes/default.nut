@@ -92,17 +92,36 @@ function SpeedrunModeLoad(){
       EntFire("good_morning_vcd", "Kill", 0)
       EntFire("enter_chamber_trigger", "Kill", 0)
       EntFire("glass_floor_brush", "Kill", 0)
-      //GetPlayer().SetOrigin(Vector(-1232,4440,2770))
       GetPlayer().SetOrigin(Vector(-1335,4166,2945))
 
       // stop everything being dark as shit
       EntFire("@rl_poststasis_exposure_reload", "Enable")
       EntFire("@rl_poststasis_exposure_reload", "Trigger")
       
-      DialogueMute_ForceFor(15);
+      // Flashbang no longer through the door
+      local fadein = GetEntity("cryo_fade_in_from_white")
+      fadein.__KeyValueFromString("rendercolor","0 0 0")
+      fadein.__KeyValueFromInt("renderamt", 255)
       EntFire("@exit_door-testchamber_door", "Open")
-      EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
-      EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
+
+      //Fast Start or Slow Start based on dialogue
+      local isDialogueEnabled = smsm.IsDialogueEnabled();
+      if(isDialogueEnabled == true){
+        EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro01\")", 3)
+        EntFire("@glados", "RunScriptCode", "GladosPlayVcd(\"PreHub01RelaxationVaultIntro04\")", 7.2)
+      }
+      else if (isDialogueEnabled == false){
+        GetPlayer().SetOrigin(Vector(-1190,4456,2724));
+        GetPlayer().SetAngles(-4, -115, 0)
+        EntFire("@music_awake", "kill")
+        EntFire("camera_intro","Kill")
+        //Do not delete is required for run to autostart
+        EntFire("camera_1", "TeleportPlayerToProxy")
+
+        EntFire("cryo_fade_in_from_white", "Kill")
+        // 1.15 is a close approximation to how long into the 3-2-1 counter is left on the normal wakeup and is used in some setups
+        EntFire("open_portal_relay", "trigger", 0, 1.15)
+      }
 
       //keep saving active
       EntFire("@command", "Command", "map_wants_save_disable 0", 0)
