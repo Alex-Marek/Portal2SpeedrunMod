@@ -247,15 +247,7 @@ function SpeedrunModeLoad(){
       break
     case "sp_a1_wakeup": 
       // Delete starting door and replace with a non-solid open one
-      local door = GetEntity("transition_entry_door-door_1")
-      local pos = Vector(6976, 642, 452)
-      local ang = door.GetAngles()
-      local newDoor = Entities.CreateByClassname("prop_dynamic");
-
-      EntFireByHandle(door, "Kill", "", 0, null, null)
-      newDoor.SetOrigin(pos)
-      newDoor.SetAngles(ang.x, ang.y, ang.z)
-      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
+      FakeVertDoor("transition_entry_door")
       //HEKCING MESS, I DONT EVEN KNOW WHAT DOES WHAT, FORGOT TO COMMENT THIS AAAAAAAAGHGHH
       EntFire("@sphere", "Kill")
       EntFire("transition_entry_door-door_1", "SetPlaybackRate", 10)
@@ -641,9 +633,7 @@ function SpeedrunModeLoad(){
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
       break
     case "sp_a2_bts4":
-      FasterVertDoor("entry_airlock_door")
-      EntFire("entry_airlock_door-open_door", "Trigger",0,0.3)
-      EntFire("entry_airlock_door-open_door", "Kill",0,1)
+      FakeVertDoor("entry_airlock_door")
 
       //always spawn broken turrets
       EntFire("turret_conveyor_1_pre_switch_case", "Kill")
@@ -655,11 +645,10 @@ function SpeedrunModeLoad(){
       
       EntFire("initial_template_turret", "AddOutput", "OnPhysGunPickup !self:SelfDestructimmediately::0:0")
 
-      //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line04.vcd") //template missing
-      //CreateSceneEntity("scenes/npc/announcer/sp_sabotage_factory_line05.vcd") //new template accepted
       EntFire("exit_airlock_door-open_door", "Trigger")
       EntFire("exit_airlock_door-open_door", "Kill",0,1)
       EntFire("exit_airlock_door-close_door_fast", "AddOutput", "OnTrigger @transition_script:RunScriptCode:TransitionFromMap():0:1")
+      FasterVertDoor("exit_turret_room_door")
 
       local turretCode =
       "local i,v\n"+
@@ -670,24 +659,17 @@ function SpeedrunModeLoad(){
 
       EntFire("turret_vo_manager", "RunScriptCode", turretCode, 0.1)
 
-      //Give the player a one turn lead on Wheatley to avoid players getting stuck
+      //Give the player a lead on Wheatley to avoid players getting stuck
       local wheatleyMoveTrigger1 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2208, -7456, 6720), 100)
       EntFireByHandle(wheatleyMoveTrigger1, "Kill", "", 0, null, null)
       local wheatleyMoveTrigger2 = Entities.FindByClassnameNearest("trigger_multiple", Vector(-2560, -7552, 6576), 100)
       EntFireByHandle(wheatleyMoveTrigger2, "Kill", "", 0, null, null)
+      FakeVertDoor("exit_airlock_door")
       break
     case "sp_a2_bts5":
-      //Just delete the door and replace it with an open one so it's non-solid
-      local door = GetEntity("exit_airlock_door-door_1")
-      local pos = Vector(3650, -1728, 3460)
-      local ang = door.GetAngles()
-      local newDoor = Entities.CreateByClassname("prop_dynamic");
-
-      EntFireByHandle(door, "Kill", "", 0, null, null)
-      newDoor.SetOrigin(pos)
-      newDoor.SetAngles(ang.x, ang.y, ang.z)
-      newDoor.SetModel("models/props/vert_door/vert_door_frame.mdl")
-
+      FakeVertDoor("exit_airlock_door")
+      FakeVertDoor("airlock_door_01")
+      FakeVertDoor("airlock_door_02")
       //make 2nd floor door open faster
       EntFire("security_door-open_door_slow", "Kill")
       EntFire("button_relay", "AddOutput", "OnTrigger security_door-open_door:Trigger::0:1")
@@ -1528,6 +1510,22 @@ function FastUndergroundTransition(idin, idout){
 function FasterVertDoor(prefabname, speed=0.1){
   EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+speed+":-1")
   EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+(speed+0.3)+":-1")//just in case LMFAO
+}
+
+function FakeVertDoor(prefabname)
+{
+  EntFire(prefabname + "-door_1_clip", "kill")
+  local door = GetEntity(prefabname + "-door_1")
+  local ang = door.GetAngles()
+  local pos = door.GetOrigin()
+  local newDoor = Entities.CreateByClassname("prop_dynamic");
+
+  EntFireByHandle(door, "Kill", "", 0, null, null)
+  newDoor.SetOrigin(pos)
+  newDoor.SetAngles(ang.x, ang.y, ang.z)
+  newDoor.SetModel("models/props/vert_door/vert_door_animated.mdl")
+  newDoor.__KeyValueFromString("targetname", prefabname + "-door_1")
+  FasterVertDoor(prefabname)
 }
 
 function FastTransition(){
