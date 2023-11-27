@@ -142,6 +142,7 @@ function SpeedrunModeLoad(){
         EntFire("camera_intro","Kill")
         EntFire("cryo_fade_in_from_white", "Kill")
       }
+      MakeCatwalkLevel("@exit_door-testchamber_door", 50, 50)
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -170,6 +171,8 @@ function SpeedrunModeLoad(){
       EntFire("logic_make_blue_3", "AddOutput", "OnTrigger emitter_blue_3:Skin:1:0.01:-1")
       EntFire("logic_make_blue_3", "AddOutput", "OnTrigger shake_portal_spawn_room1a:StartShake::0.01:-1")
       
+      MakeCatwalkLevel("@exit_door-testchamber_door",50,50)
+
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
@@ -196,9 +199,8 @@ function SpeedrunModeLoad(){
       EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger emitter_orange_mtg:Skin:2:0:1")
       EntFire("room_1_portal_deactivate_rl", "AddOutput", "OnTrigger room_2_portal_shake:StartShake::0:1")
 
-      //dialogue fix
-      //EntFire("glados_trigger", "Kill")
 
+      MakeCatwalkLevel("door_3-testchamber_door",50,50)
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
@@ -217,11 +219,14 @@ function SpeedrunModeLoad(){
       EntFire("fizzler1_disable_rl", "AddOutput", "OnTrigger section_2_portal_emitter_a1_rm3a:Skin:2:0:1")
       EntFire("fizzler1_disable_rl", "AddOutput", "OnTrigger section_2_shake_portal_spawn_a1_rm3a:StartShake::0:1")
 
+      MakeCatwalkLevel("door_2-testchamber_door",50,50)
+
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a1_intro5":
+      MakeCatwalkLevel("door_1-testchamber_door",50,50)
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
@@ -236,6 +241,9 @@ function SpeedrunModeLoad(){
 
       //make door 3 open faster
       EntFire("room_1_door_close_rl" "AddOutput", "OnTrigger room_2_entry_door-door_open_relay:Trigger::0:1")
+
+      //Don't want this one even because the player comes in with speed and kinda actually lands right where the door starts
+      //MakeCatwalkLevel("room_2_exit_door-testchamber_door",200,50)
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -349,11 +357,13 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_stairs":
+      MakeCatwalkLevel("door_1-testchamber_door", 50,50)
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_dual_lasers":
+      MakeCatwalkLevel("door_1-testchamber_door", 50,50)
       //make "Dual lasers floor non-cancer"
       EntFire("platform_door", "Close", 0.5)
       EntFire("rotating_wall_noportal_volume", "Kill")
@@ -375,17 +385,23 @@ function SpeedrunModeLoad(){
       EntFire("entry_landing_close_relay", "Kill", 0.1)
       EntFire("entry_landing_open_relay", "Kill", 0.1)
       EntFire("door_1-door_open_relay", "Trigger", 0.2)
+      local exitDoor = GetEntity("@exit_door-testchamber_door")
+      exitDoor.SetAngles(0,0,0)
+      MakeCatwalkLevel("@exit_door-testchamber_door", 50,50)
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_catapult_intro":
+      createCubeHelper(-20, 90, Vector(-192,-1376,-410))
       EntFire("door_1-door_open_relay", "Trigger")
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Trigger::1:1", 0)
       EntFire("arrival_elevator-leaving_elevator_trigger", "AddOutput", "OnTrigger hallway_sim_go:Kill::1.1:1", 0)
       EntFire("hallway_sim_blocker", "Kill")
       EntFire("catapult_target_relay", "Trigger")
+
+      MakeCatwalkLevel("@exit_door-testchamber_door", 50,50)
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -412,6 +428,8 @@ function SpeedrunModeLoad(){
       EntFire("open_button_escape_panels", "Trigger", 0, 8)
       EntFire("close_button_escape_panels", "Kill", 0, 8)
       EntFire("open_button_escape_panels", "Kill", 0, 10)
+
+      createCubeHelper(-20, 130, Vector(-191,1311,-230))
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -454,14 +472,7 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_ricochet":
-
-      local cubeZucc = Entities.CreateByClassname("point_push")  
-      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
-      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
-      cubeZucc.__KeyValueFromInt("magnitude", -20)
-      cubeZucc.__KeyValueFromInt("radius", 150)
-      EntFire("cubeZucker", "Enable")
-      cubeZucc.SetOrigin(Vector(3488, 959, -480))
+      createCubeHelper(-20, 150, Vector(3488, 959, -480))
 
       EntFire("cube_retrieved_relay", "Trigger")
       EntFire("cube_retrieved_relay", "Kill", 0, 1)
@@ -474,13 +485,7 @@ function SpeedrunModeLoad(){
       EntFire("departure_elevator-elevator_turret_wife", "Kill", 1)
 
       // Button Now sucks cube to it 👍
-      local cubeZucc = Entities.CreateByClassname("point_push")  
-      cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
-      cubeZucc.__KeyValueFromString("targetname", "cubeZucker")
-      cubeZucc.__KeyValueFromInt("magnitude", -20)
-      cubeZucc.__KeyValueFromInt("radius", 150)
-      EntFire("cubeZucker", "Enable")
-      cubeZucc.SetOrigin(Vector(-479, -448, 100))
+      createCubeHelper(-20, 150, Vector(-479, -448, 100))
 
       //sometimes I just wonder why I hate someone without apparent reason
       //anyway so fuck you bets
@@ -528,11 +533,13 @@ function SpeedrunModeLoad(){
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_turret_blocker":
+      createCubeHelper(-20, 75, Vector(63, 510, 35))
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
       endEle.SetSize(Vector(-65, -65, -172), Vector(65, 65, -30))
       break
     case "sp_a2_laser_vs_turret":
+      createCubeHelper(-20, 130, Vector(-96, 96, 285))
       //make turrets explode faster if portals are in right position and laser is activated
       EntFire("button_1_pressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:StartFastFakeExplosionsInLvT():0:-1", 0)
       EntFire("button_1_unpressed", "AddOutput", "OnTrigger "+self.GetName()+":RunScriptCode:EndFastFakeExplosionsInLvT():0:-1", 0)
@@ -546,6 +553,7 @@ function SpeedrunModeLoad(){
       break;
     case "sp_a2_pull_the_rug":
       FixCelesteModeWindow(Vector(128, -649, 192), Vector(0,270,0));
+      createCubeHelper(-20, 115, Vector(192.9, -448.5, -163))
 
       // Remove Top from departure elevator
       local endEle = GetEntity("departure_elevator-elevator_1")
@@ -1038,11 +1046,7 @@ function SpeedrunModeLoad(){
       break
     case "sp_a4_intro":
       EntFire("button_1_solved", "Kill")
-      /* EntFire("wheatley_monitor1-coverpanel_bottom", "Close",0,1)
-      EntFire("wheatley_monitor1-coverpanel_top", "Close",0,1)
-      for(local i=1;i<=4;i++){
-        EntFire("wheatley_monitor"+i+"-monitor_arm", "Kill")
-      } */
+      createCubeHelper(-20, 100, Vector(-64, -256, 35))
       EntFire("catwalk_lift_door", "SetSpeed", 100)
       EntFire("catwalk_gate2_door_left", "SetSpeed", 300)
       EntFire("catwalk_gate2_door_right", "SetSpeed", 300)
@@ -1085,6 +1089,7 @@ function SpeedrunModeLoad(){
       Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_tb_catch":
+      createCubeHelper(-20, 110, Vector(702,1183,323))
       local endElevatorLeave = Entities.FindByClassnameNearest("trigger_multiple", Vector(1440, 896, 148), 10)
       Chapter8ElevatorFix(endElevatorLeave)
       break
@@ -1184,6 +1189,8 @@ function SpeedrunModeLoad(){
       Chapter8ElevatorFix(endElevatorLeave)
       break
     case "sp_a4_finale1":
+      FakeVertDoor("liftshaft_airlock_exit")
+      FakeVertDoor("final_door")
       EntFire("final_door-open_door", "Trigger")
       EntFire("final_door-open_door", "Kill", 0, 0.1)
 
@@ -1209,6 +1216,8 @@ function SpeedrunModeLoad(){
       EntFire("@glados", "RunScriptCode", "nuke()", 8.5)
       break
     case "sp_a4_finale2":
+      FakeVertDoor("entrance_door")
+      FakeVertDoor("bts_door_1")
       EntFire("relay_world_shudder", "Kill")
       EntFire("env_shake", "Kill")
       EntFire("shake_pipe_fall", "Kill")
@@ -1531,8 +1540,7 @@ function FasterVertDoor(prefabname, speed=0.1){
   EntFire(prefabname+"-open_door", "AddOutput", "OnTrigger "+prefabname+"-door_1:SetAnimation:vert_door_open_idle:"+(speed+0.3)+":-1")//just in case LMFAO
 }
 
-function FakeVertDoor(prefabname)
-{
+function FakeVertDoor(prefabname){
   EntFire(prefabname + "-door_1_clip", "kill")
   local door = GetEntity(prefabname + "-door_1")
   local ang = door.GetAngles()
@@ -1545,6 +1553,34 @@ function FakeVertDoor(prefabname)
   newDoor.SetModel("models/props/vert_door/vert_door_animated.mdl")
   newDoor.__KeyValueFromString("targetname", prefabname + "-door_1")
   FasterVertDoor(prefabname)
+}
+
+function createCubeHelper(power, radius, coords){
+  local cubeZucc = Entities.CreateByClassname("point_push")
+  cubeZucc.__KeyValueFromInt("SpawnFlags", 16)
+  cubeZucc.__KeyValueFromInt("magnitude", power)
+  cubeZucc.__KeyValueFromInt("radius", radius)
+  EntFireByHandle(cubeZucc, "Enable", "", 0, null, null)
+  cubeZucc.SetOrigin(coords)
+}
+
+function MakeCatwalkLevel(endDoorName, lengthToCatWalk, sideLength){
+  local endDoor = GetEntity(endDoorName)
+  local newFloor = Entities.CreateByClassname("func_brush")
+  newFloor.SetOrigin(Vector(endDoor.GetOrigin().x, endDoor.GetOrigin().y, endDoor.GetOrigin().z))
+  if(endDoor.GetAngles().y == 90 || endDoor.GetAngles().y == -270){
+    newFloor.SetSize(Vector(sideLength*-1,lengthToCatWalk*-1,-4), Vector(sideLength,0,4))
+  }
+  else if(endDoor.GetAngles().y == 270 || endDoor.GetAngles().y == -90){
+    newFloor.SetSize(Vector(sideLength*-1,0, -4), Vector(sideLength,lengthToCatWalk,4))
+  }
+  else if(endDoor.GetAngles().y == 180 || endDoor.GetAngles().y == -180){
+    newFloor.SetSize(Vector(0,sideLength*-1,-4), Vector(lengthToCatWalk,sideLength,4))
+  }
+  else if(endDoor.GetAngles().y == 0){
+    newFloor.SetSize(Vector(lengthToCatWalk*-1,sideLength*-1,-4), Vector(0,sideLength,4))
+  }
+  newFloor.__KeyValueFromInt("Solid", 3)
 }
 
 function FastTransition(){
@@ -1633,7 +1669,6 @@ function Finale4Anim(frame){
 
   EntFire(self.GetName(), "RunScriptCode", "Finale4Anim("+(frame+1)+")", 0.001)
 }
-
 
 FUCKING_FOG_VALUES <- 
 [
